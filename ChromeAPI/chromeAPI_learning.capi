@@ -1,0 +1,44 @@
+https://developer.chrome.com/apps/first_app
+
+this is your first packed app unlike your first extension
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+used to divide everything for now
+
+
+
+Create your first app
+
+The manifest tells Chrome about your app, what it is, how to launch it and the extra permissions that it requires.
+
+
+The background script is used to create the event page responsible for managing the app life cycle.
+All code must be included in the Chrome App package. This includes HTML, JS, CSS and Native Client modules.
+All icons and other assets must be included in the package as well.
+
+
+    folder: helloWorldApp
