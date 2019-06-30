@@ -5,10 +5,10 @@
   "icons": {
     "128": "icon_128.png"
   },
-  "permissions": [],
+  "permissions": ["storage"],
   "app": {
     "background": {
-      "scripts": ["background.js"]
+      "scripts": ["background1.js"]
     }
   },
   "minimum_chrome_version": "28"

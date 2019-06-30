@@ -282,3 +282,35 @@ How to adapt an existing web application for the Chrome Apps platform.
 How to make your app scripts Content Security Policy (CSP) compliant.
 How to implement local storage using the chrome.storage.local.
 
+folder todomvc
+
+the app we have in todomvc is non CSR coomplinant to make it complinant
+
+add  index.html
+----------------------------------------
+<script>
+  // Bootstrap app data
+  window.app = {};
+</script>
+----------------------------------------
+
+-->
+
+----------------------------------------
+//<script>
+  // Bootstrap app data
+  //window.app = {};
+//</script>
+[anadir] <script src="js/bootstrap.js"></script>
+----------------------------------------
+
+and move the inline script to bootstrap.js
+
+
+
+
+Convert localStorage to chrome.storage.local
+
+    localStroange is sync i/o chrome apps dont like this
+    use chrome.storage.local, refer to
+    background1.js (put in place of the other files in reference)
