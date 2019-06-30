@@ -42,3 +42,175 @@ All icons and other assets must be included in the package as well.
 
 
     folder: helloWorldApp
+
+just load unpacked and use it
+here you have access to the filesystem, now you need it to communicate with the ultraObject which may come as an extension, but first lets access the desried folder
+
+https://developer.chrome.com/apps/fileSystem
+
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YthebbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+what chrome apps really look like
+
+you have the app container a GUI
+the programming model represents interaction, without the reoruces of a network connection or a browser
+
+it goes like this
+    installation, user chooses to explicitly install the app
+    startup - how thhe window is lanucned, here you controll communication between other apps
+    termination- user can terminiate data anytime, stashing data protects against data laoss
+    update - at any time but do not change runtime application in realtime
+    uninistalled - no executed code or private data is left behind
+    
+
+
+Security Model
+    they want the programmer to code in a secure manner
+    they use process isolation, every resource needed for a provess to do is job is given an isolated one
+    you can use the object tag to embed extenal content
+    
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YthebbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+Chrome App Lifecycle
+
+
+this controls how the app acts
+
+when the event hs no executing js, window, or callbacks the runtime unloads the event page and closes the app
+
+
+    Create event page and windows
+        every app needs one
+
+ex:
+ 
+"background": {
+  "scripts": [
+    "foo.js",
+    "background.js"
+  ]
+}
+
+
+background.js
+chrome.app.runtime.onLaunched.addListener(function() {
+  // Tell your app what to launch and how.
+});
+
+
+
+Create windows#
+
+    the event  page can mmake one or more windows
+
+chrome.app.runtime.onLaunched.addListener(function() {
+    chrome.app.window.create('main.html', {
+        id: 'MyWindowID',
+        bounds: {
+            width: 800,
+            height: 600,
+            left: 100,
+            top: 100
+        },
+        minWidth: 800,
+        minHeight: 600
+    });
+});
+
+sometimes you need to handle launch dates
+
+
+
+Listening for app runtime event
+
+    you dont need to set this up but its important you use it
+    
+        Storing local settings#
+        chrome.runtime.onInstalled() is called when your app has first been installed, or when it has been updated
+
+        chrome.runtime.onInstalled.addListener(function() {
+          chrome.storage.local.set(object items, function callback);
+        });
+
+        
+        Preventing data loss#
+        try to save important data
+
+
+        Clean-up before app closes
+        save it periodically since you can lose its state
+
+
+
+Content Security Policy
+
+    What is the CSP for Chrome Apps?
+
+    You can’t use inline scripting in your Chrome App pages. The restriction bans both <script> blocks and event handlers (<button onclick="...">).
+    You can’t reference any external resources in any of your app files (except for video and audio resources). You can’t embed external resources in an iframe.
+    You can’t use string-to-JavaScript methods like eval() and new Function().
+    
+
+
+    How to comply with CSP
+    all js resources should be local
+
+        use precomplied libraries, if not precompiled you have work to do, sandbox cannot interact with chrome API
+        to
+
+        You can fetch remote resources via XMLHttpRequest and serve them via blob:, data:, or filesystem: URLs (see Referencing external resources).
+        https://developer.chrome.com/apps/app_external#external
+        chrome trust media externals because the securiy there is very good
+
+        you can use a webframe instead of an embed tag
+        https://developer.chrome.com/apps/app_external#webview

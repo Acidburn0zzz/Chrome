@@ -3,6 +3,7 @@
   "description": "My first Chrome App.",
   "version": "0.1",
   "manifest_version": 2,
+    "permissions":   ["activeTab", "alarms", "background", "bookmarks", "browsingData", "clipboardRead", "clipboardWrite", "contentSettings", "contextMenus", "cookies", "debugger", "dns", "downloads", "downloads.open", "geolocation", "history", "identity", "idle", "management", "nativeMessaging", "notifications", "pageCapture",  "privacy", "proxy", "sessions", "storage", "tabs", "topSites", "unlimitedStorage", "webNavigation",{"fileSystem": ["write", "retainEntries", "directory"]} ],
   "app": {
     "background": {
       "scripts": ["background.js"]
