@@ -18,15 +18,17 @@
 
     dbName = this._dbName = name;
 
-    if (!localStorage[dbName]) {
-      data = {
-        todos: []
-      };
-
-      localStorage[dbName] = JSON.stringify(data);
-    }
-
-    callback.call(this, JSON.parse(localStorage[dbName]));
+    chrome.storage.local.get(dbName, function(storage) {
+      if ( dbName in storage ) {
+        callback.call(this, storage[dbName].todos);
+      } else {
+        storage = {};
+        storage[dbName] = { todos: [] };
+        chrome.storage.local.set( storage, function() {
+          callback.call(this, storage[dbName].todos);
+        }.bind(this));
+      }
+    }.bind(this));
   }
 
   /**
@@ -47,13 +49,14 @@
       return;
     }
 
-    var todos = JSON.parse(localStorage[this._dbName]).todos;
-
-    callback.call(this, todos.filter(function (todo) {
-      for (var q in query) {
-        return query[q] === todo[q];
-      }
-    }));
+    chrome.storage.local.get(this._dbName, function(storage) {
+      var todos = storage[this._dbName].todos.filter(function (todo) {
+        for (var q in query) {
+          return query[q] === todo[q];
+        }
+      });
+      callback.call(this, todos);
+    }.bind(this));
   };
 
   /**
@@ -63,7 +66,10 @@
    */
   Store.prototype.findAll = function (callback) {
     callback = callback || function () {};
-    callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
+    chrome.storage.local.get(this._dbName, function(storage) {
+      var todos = storage[this._dbName] && storage[this._dbName].todos || [];
+      callback.call(this, todos);
+    }.bind(this));
   };
 
   /**
@@ -75,35 +81,46 @@
    * @param {function} callback The callback to fire after saving
    */
   Store.prototype.save = function (id, updateData, callback) {
-    var data = JSON.parse(localStorage[this._dbName]);
-    var todos = data.todos;
+    chrome.storage.local.get(this._dbName, function(storage) {
+      var data = storage[this._dbName];
+      var todos = data.todos;
 
-    callback = callback || function () {};
+      callback = callback || function () {};
 
-    // If an ID was actually given, find the item and update each property
-    if (typeof id !== 'object') {
-      for (var i = 0; i < todos.length; i++) {
-        if (todos[i].id == id) {
-          for (var x in updateData) {
-            todos[i][x] = updateData[x];
+      // If an ID was actually given, find the item and update each property
+      if (typeof id !== 'object'  || Array.isArray(id) ) {
+        var ids = [].concat( id );
+        ids.forEach(function(id) {
+          for (var i = 0; i < todos.length; i++) {
+            if (todos[i].id == id) {
+              for (var x in updateData) {
+                todos[i][x] = updateData[x];
+              }
+            }
           }
-        }
+        });
+
+        chrome.storage.local.set(storage, function() {
+          chrome.storage.local.get(this._dbName, function(storage) {
+            callback.call(this, storage[this._dbName].todos);
+          }.bind(this));
+        }.bind(this));
+
+      } else {
+        callback = updateData;
+
+        updateData = id;
+
+        // Generate an ID
+        updateData.id = new Date().getTime();
+
+        todos.push(updateData);
+        chrome.storage.local.set(storage, function() {
+          callback.call(this, [updateData]);
+        }.bind(this));
+
       }
-
-      localStorage[this._dbName] = JSON.stringify(data);
-      callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
-    } else {
-      callback = updateData;
-
-      updateData = id;
-
-      // Generate an ID
-      updateData.id = new Date().getTime();
-
-      todos.push(updateData);
-      localStorage[this._dbName] = JSON.stringify(data);
-      callback.call(this, [updateData]);
-    }
+    }.bind(this));
   };
 
   /**
@@ -113,18 +130,24 @@
    * @param {function} callback The callback to fire after saving
    */
   Store.prototype.remove = function (id, callback) {
-    var data = JSON.parse(localStorage[this._dbName]);
-    var todos = data.todos;
+    chrome.storage.local.get(this._dbName, function(storage) {
+      var data = storage[this._dbName];
+      var todos = data.todos;
 
-    for (var i = 0; i < todos.length; i++) {
-      if (todos[i].id == id) {
-        todos.splice(i, 1);
-        break;
-      }
-    }
+      var ids = [].concat(id);
+      ids.forEach( function(id) {
+        for (var i = 0; i < todos.length; i++) {
+          if (todos[i].id == id) {
+            todos.splice(i, 1);
+            break;
+          }
+        }
+      });
 
-    localStorage[this._dbName] = JSON.stringify(data);
-    callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
+      chrome.storage.local.set(storage, function() {
+        callback.call(this, todos);
+      }.bind(this));
+    }.bind(this));
   };
 
   /**

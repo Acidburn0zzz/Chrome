@@ -1,3 +1,13 @@
+add [file]
+--------------------------------------------
+--------------------------------------------
+
+-->
+
+--------------------------------------------
+--------------------------------------------
+
+
 https://developer.chrome.com/apps/first_app
 
 this is your first packed app unlike your first extension
@@ -314,3 +324,120 @@ Convert localStorage to chrome.storage.local
     localStroange is sync i/o chrome apps dont like this
     use chrome.storage.local, refer to
     background1.js (put in place of the other files in reference)
+
+
+using chrome.stroage.local
+
+    to use set
+
+        var storage = {};
+        storage[dbName] = { todos: [] };
+        chrome.storage.local.set( storage, function(storage) {
+            var todos = storage[dbName].todos;
+        });
+
+        also want to use the store
+        also want to use bind so you can proeprly reference objects
+
+
+folder todomvc
+
+
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+add alarms and notifications
+
+you need to remind your user of things
+
+files:background2.js
+        manifest.json
+      index2.html
+    js/alarms.js
+
+
+    add manifest.json
+    --------------------------------------------
+    "permissions": ["storage"]
+    --------------------------------------------
+    
+    -->
+    
+    --------------------------------------------
+    "permissions": ["storage", "alarms"]
+    --------------------------------------------
+    
+    
+    add background.js
+    chrome.alarms.onAlarm.addListener(function( alarm ) {
+      console.log("Got an alarm!", alarm);
+    });
+
+    
+    add  background2.js
+    --------------------------------------------
+    --------------------------------------------
+    
+    -->
+    
+    --------------------------------------------
+    [anadir]
+    chrome.alarms.onAlarm.addListener(function( alarm ) {
+      console.log("Got an alarm!", alarm);
+    });
+    --------------------------------------------
+
+
+    add index2.html
+    --------------------------------------------
+      <footer id="info">
+        <p>Double-click to edit a todo</p>
+        <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
+    
+    @#@#
+    --------------------------------------------
+    
+    -->
+    
+    
+    --------------------------------------------
+      <footer id="info">
+        <p>Double-click to edit a todo</p>
+        <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
+        [anadir] <button id="toggleAlarm">Activate alarm</button>
+    
+    @#@#
+    
+    [anadir] <script src="js/alarms.js"></script>
+    --------------------------------------------
+
+and thre you go
+
+
+Add notifications
+    
+    
