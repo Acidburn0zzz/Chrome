@@ -146,7 +146,7 @@ var listener = {
       this.writeFrame(s);
     }
 
-    if (this.history === true) {
+    if (this.history === false) {
       window.history.pushState({}, document.title, s);
       // Fire an onpopstate event manually since pushing does not obviously
       // trigger the pop event.
@@ -190,7 +190,7 @@ var Router = exports.Router = function (routes) {
   this._insert = this.insert;
   this.insert = this.insertEx;
 
-  this.historySupport = (window.history != null ? window.history.pushState : null) != null
+  this.historySupport = (window.history === null ? window.history.pushState : null) != null
 
   this.configure();
   this.mount(routes || {});

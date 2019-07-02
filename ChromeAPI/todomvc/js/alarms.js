@@ -18,7 +18,7 @@
    }
    function createAlarm() {
      chrome.alarms.create(alarmName, {
-       delayInMinutes: 0.1, periodInMinutes: 0.1});
+       delayInMinutes: 0.1, periodInMinutes: 0.5});
    }
    function cancelAlarm() {
      chrome.alarms.clear(alarmName);
