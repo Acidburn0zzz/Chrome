@@ -484,3 +484,223 @@ Open External Links With a Webview
 
 sometimes you have to show stuff from the web with all its styling but keep them in the application
 this is called a webview
+
+
+
+didnt save the data just refer to
+https://developer.chrome.com/apps/app_codelab_webview or it should work out
+
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+Add Images From the Web
+
+
+How to load resources from outside your app and add them to the DOM through XHR and ObjectURLs.
+
+to load an image -  XMLHttpRequest, transform it into a Blob, and create an ObjectURL
+
+
+Update permissions
+    
+    to make XHR you must provide the domain in the permissions in manifest.json, if you dont know it use <all_urls>"
+
+
+add manifest.json
+--------------------------------------------
+"permissions": ["storage", "alarms", "notifications", "webview"]
+--------------------------------------------
+
+-->
+
+--------------------------------------------
+"permissions": ["storage", "alarms", "notifications", "webview", "<all_urls>"],
+--------------------------------------------
+
+
+
+to create  ObjectURL
+    ObjectURL hold memory let them go with this command
+    
+    
+Controller.prototype._createObjectURL = function(blob) {
+  var objURL = URL.createObjectURL(blob);
+  this.objectURLs = this.objectURLs || [];
+  this.objectURLs.push(objURL);
+  return objURL;
+};
+
+Controller.prototype._clearObjectURL = function() {
+  if (this.objectURLs) {
+    this.objectURLs.forEach(function(objURL) {
+      URL.revokeObjectURL(objURL);
+    });
+    this.objectURLs = null;
+  }
+};
+
+
+to realtime parse for imageURL's turn them to images
+
+Controller.prototype._parseForImageURLs = function () {
+  // remove old blobs to avoid memory leak:
+  this._clearObjectURL();
+  var links = this.$todoList.querySelectorAll('a[data-src]:not(.thumbnail)');
+  var re = /\.(png|jpg|jpeg|svg|gif)$/;
+  for (var i = 0; i<links.length; i++) {
+    var url = links[i].getAttribute('data-src');
+    if (re.test(url)) {
+      links[i].classList.add('thumbnail');
+      this._requestRemoteImageAndAppend(url, links[i]);
+    }
+  }
+};
+
+
+Now call _parseForImageURLs() from showAll(), showActive(), and showCompleted(): and editItem()
+
+
+add js/controller.js
+--------------------------------------------
+Controller.prototype.showAll = function () {
+this.model.read(function (data) {
+//this.$todoList.innerHTML = this.view.show(data);\
+this.$todoList.innerHTML = this._parseForURLs(this.view.show(data));
+@#@#
+
+Controller.prototype.showActive = function () {
+    this.model.read({ completed: 0 }, function (data) {
+    this.$todoList.innerHTML = this._parseForURLs(this.view.show(data));
+
+@#@#
+
+  Controller.prototype.showCompleted = function () {
+    this.model.read({ completed: 1 }, function (data) {
+    this.$todoList.innerHTML = this._parseForURLs(this.view.show(data));
+
+@#@#
+
+
+    var onSaveHandler = function () {
+        var value = input.value.trim();
+        var discarding = input.dataset.discard;
+
+      if (value.length && !discarding) {
+        this.model.update(id, { title: input.value });
+
+        // Instead of re-rendering the whole view just update
+        // this piece of it
+        label.innerHTML = this._parseForURLs(value);
+
+@#@#
+--------------------------------------------
+
+-->
+
+--------------------------------------------
+Controller.prototype.showAll = function () {
+this.model.read(function (data) {
+//this.$todoList.innerHTML = this.view.show(data);\
+this.$todoList.innerHTML = this._parseForURLs(this.view.show(data));
+this._parseForImageURLs();
+@#@#
+
+Controller.prototype.showActive = function () {
+    this.model.read({ completed: 0 }, function (data) {
+    this.$todoList.innerHTML = this._parseForURLs(this.view.show(data));
+    this._parseForImageURLs();
+
+@#@#
+
+  Controller.prototype.showCompleted = function () {
+    this.model.read({ completed: 1 }, function (data) {
+    this.$todoList.innerHTML = this._parseForURLs(this.view.show(data));
+    this._parseForImageURLs();
+
+@#@#
+
+
+    var onSaveHandler = function () {
+        var value = input.value.trim();
+        var discarding = input.dataset.discard;
+
+      if (value.length && !discarding) {
+        this.model.update(id, { title: input.value });
+
+        // Instead of re-rendering the whole view just update
+        // this piece of it
+        label.innerHTML = this._parseForURLs(value);
+        this._parseForImageURLs();
+
+@#@#
+
+[anadir]
+Controller.prototype._createObjectURL = function(blob) {
+    var objURL = URL.createObjectURL(blob);
+    this.objectURLs = this.objectURLs || [];
+    this.objectURLs.push(objURL);
+    return objURL;
+};
+Controller.prototype._clearObjectURL = function() {
+  if (this.objectURLs) {
+    this.objectURLs.forEach(function(objURL) {
+      URL.revokeObjectURL(objURL);
+    });
+    this.objectURLs = null;
+  }
+};
+
+Controller.prototype._parseForImageURLs = function () {
+  // remove old blobs to avoid memory leak:
+  this._clearObjectURL();
+  var links = this.$todoList.querySelectorAll('a[data-src]:not(.thumbnail)');
+  var re = /\.(png|jpg|jpeg|svg|gif)$/;
+  for (var i = 0; i<links.length; i++) {
+    var url = links[i].getAttribute('data-src');
+    if (re.test(url)) {
+      links[i].classList.add('thumbnail');
+      this._requestRemoteImageAndAppend(url, links[i]);
+    }
+  }
+};
+--------------------------------------------
+
+
+
+bower_components/todomvc-common/base.css
+--------------------------------------------
+--------------------------------------------
+
+-->
+
+--------------------------------------------
+[anadir]
+.thumbnail img[data-src] {
+  max-width: 100px;
+  max-height: 28px;
+}
+--------------------------------------------

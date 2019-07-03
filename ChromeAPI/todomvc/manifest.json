@@ -1,3 +1,5 @@
+// learned how to use xhr and blob and objectURL which is stroed in memeory to retireve extenral resources
+
 {
   "manifest_version": 2,
   "name": "Codelab",
@@ -5,7 +7,7 @@
   "icons": {
     "128": "icon_128.png"
   },
-  "permissions": ["storage","alarms","notifications"],
+  "permissions": ["storage","alarms","notifications","webview"],
   "app": {
     "background": {
       "scripts": ["background3.js"]
