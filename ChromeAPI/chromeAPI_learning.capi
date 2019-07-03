@@ -440,4 +440,47 @@ and thre you go
 
 Add notifications
     
+    files: background3.js
+            index3.html
+            downloaded from site
     
+
+
+    add manifest.json
+    --------------------------------------------
+    "permissions": ["storage", "alarms"]
+    --------------------------------------------
+    
+    -->
+    
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+Open External Links With a Webview
+
+
+sometimes you have to show stuff from the web with all its styling but keep them in the application
+this is called a webview

@@ -18,7 +18,6 @@ chrome.app.runtime.onLaunched.addListener(launch);
 
 
 chrome.alarms.onAlarm.addListener(function( alarm ) {
-  debugger
   console.log("Got an alarm!", alarm);
   chrome.storage.local.get(dbName, showNotification);
 });
