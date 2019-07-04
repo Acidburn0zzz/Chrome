@@ -704,3 +704,83 @@ bower_components/todomvc-common/base.css
   max-height: 28px;
 }
 --------------------------------------------
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+Export todos
+
+How to get a reference to a file in the external filesystem.
+How to write to the filesystem.
+
+
+filesystem API permissions
+// Read only
+"permissions": ["fileSystem"]
+
+// Read and write
+"permissions": [{"fileSystem": ["write"]}]
+
+// Read, write, autocomplate previous input, and select folder directories instead of files
+"permissions": [{"fileSystem": ["write", "retainEntries", "directory"]}]
+
+manifest.json
+--------------------------------------------
+"permissions": ["storage", "alarms", "notifications", "webview",
+                 "<all_urls>"]
+--------------------------------------------
+
+-->
+
+--------------------------------------------
+"permissions": ["storage", "alarms", "notifications", "webview",
+                 "<all_urls>", { "fileSystem": ["write"] } ],
+--------------------------------------------
+
+add index3.html
+--------------------------------------------
+<footer id="info">
+  <button id="toggleAlarm">Activate alarm</button>
+
+  ...
+</footer>
+--------------------------------------------
+
+-->
+
+--------------------------------------------
+<footer id="info">
+  <button id="toggleAlarm">Activate alarm</button>
+    @#@#
+  <button id="exportToDisk">Export to disk</button>
+  <div id="status"></div>
+    @#@#
+  ...
+</footer>
+
+[anadir]
+<script src="js/export.js"></script>
+--------------------------------------------
