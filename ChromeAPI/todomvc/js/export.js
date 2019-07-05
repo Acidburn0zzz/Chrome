@@ -25,42 +25,57 @@
     }
 
 function exportToFileEntry(fileEntry) {
-  savedFileEntry = fileEntry;
-
-  var status = document.getElementById('status');
-
-  // Use this to get a file path appropriate for displaying
-  chrome.fileSystem.getDisplayPath(fileEntry, function(path) {
+    savedFileEntry = fileEntry;
+    console.log(   savedFileEntry   )
+    var status = document.getElementById('status');
+    
+    // Use this to get a file path appropriate for displaying
+    chrome.fileSystem.getDisplayPath(fileEntry, function(path) {
+        
     fileDisplayPath = path;
     status.innerText = 'Exporting to '+path;
-  });
-
-  getTodosAsText( function(contents) {
-
-    fileEntry.createWriter(function(fileWriter) {
-
-      var truncated = false;
-      var blob = new Blob([contents]);
-
-      fileWriter.onwriteend = function(e) {
-        if (!truncated) {
-          truncated = true;
-          // You need to explicitly set the file size to truncate
-          // any content that might have been there before
-          this.truncate(blob.size);
-          return;
-        }
-        status.innerText = 'Export to '+fileDisplayPath+' completed';
-      };
-
-      fileWriter.onerror = function(e) {
-        status.innerText = 'Export failed: '+e.toString();
-      };
-
-      fileWriter.write(blob);
-
     });
-  });
+    
+    getTodosAsText( function(contents) {
+    
+    fileEntry.file((files)=>{
+        var reader = new FileReader()
+        
+        reader.onload = function() {
+          console.log(reader.result);
+        };
+    
+        reader.onerror = function() {
+          console.log(reader.error);
+        }
+        
+        reader.readAsText(files);
+        
+    })
+    // fileEntry.createWriter(function(fileWriter) {
+    
+    //   var truncated = false;
+    //   var blob = new Blob([contents]);
+    
+    //   fileWriter.onwriteend = function(e) {
+    //     if (!truncated) {
+    //       truncated = true;
+    //       // You need to explicitly set the file size to truncate
+    //       // any content that might have been there before
+    //       this.truncate(blob.size);
+    //       return;
+    //     }
+    //     status.innerText = 'Export to '+fileDisplayPath+' completed';
+    //   };
+    
+    //   fileWriter.onerror = function(e) {
+    //     status.innerText = 'Export failed: '+e.toString();
+    //   };
+    
+    //   fileWriter.write(blob);
+    
+    // });
+    });
 }
 
 
@@ -68,6 +83,7 @@ function exportToFileEntry(fileEntry) {
       if (savedFileEntry) {
     
         exportToFileEntry(savedFileEntry);
+        
     
       } else {
     
@@ -81,7 +97,12 @@ function exportToFileEntry(fileEntry) {
     
       }
   }
-
+  
+    function fS(){
+        
+    }
   document.getElementById('exportToDisk').addEventListener('click', doExportToDisk);
+//   document.getElementById('exportToDisk').addEventListener('click', fS);
+  
 
 })();
