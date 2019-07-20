@@ -817,3 +817,275 @@ how to publish yr app and see it in the chrome webstore
 https://developer.chrome.com/apps/app_codelab_publish
 
 
+
+
+
+
+EXTENSIONS IN DEPTH STUDY
+EXTENSIONS IN DEPTH STUDY
+
+
+
+
+
+
+
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+
+Overview
+
+
+
+to access files
+
+Referring to files
+An extension's files can be referred to by using a relative URL, just as files in an ordinary HTML page.
+
+  <img src="images/my_image.png">
+
+or
+
+chrome-extension://<extensionID>/<pathToFile>
+
+
+        unpacked extension id will change when
+        
+        if the extension is loaded from a different directory
+        ID will change again when the extension is packaged.
+        extension's code relies on an absolute URL, it can use the chrome.runtime.getURL() method to avoid hardcoding the ID during development.
+
+
+
+Architecture
+
+    Background script
+        listens for browser events
+    
+    use the declarative content API to make the icon for the background script availbe to users
+    
+
+    Content scirpts
+        they modify  web pages
+        they communicate with extension parent by using the stroage API
+
+    options page
+        customization for the extension
+
+
+
+Using Chrome APIs
+
+    webpages and extensions can both open new tabs, but  extensions can choose which tabs with
+    tabs.create method
+
+    async methods use callbacks
+
+    sync methods dont
+
+
+    chrome.browserAction.onClicked.addEventListener  might be what you need
+
+
+Communication between pages
+
+    they use chrome.extension. once a connection is established they can call fn to manipulate DOM of other pages
+
+    
+
+Saving data and incognito mode
+
+
+    when a tab is in incognito extension dont have to respect the losing of data
+    
+
+    to check a tab is incognito
+        function saveTabData(tab) {
+          if (tab.incognito) {
+            return;
+          } else {
+            chrome.storage.local.set({data: tab.url});
+          }
+        }
+
+
+Manifest File Format
+
+
+    {
+  // Required
+  "manifest_version": 2,
+  "name": "My Extension",
+  "version": "versionString",
+
+  // Recommended
+  "default_locale": "en",
+  "description": "A plain text description",
+  "icons": {...},
+
+  // Pick one (or none)
+  "browser_action": {...},
+  "page_action": {...},
+
+  // Optional
+  "action": ...,
+  "author": ...,
+  "automation": ...,
+  "background": {
+    // Recommended
+    "persistent": false,
+    // Optional
+    "service_worker":
+  },
+  "chrome_settings_overrides": {...},
+  "chrome_ui_overrides": {
+    "bookmarks_ui": {
+      "remove_bookmark_shortcut": true,
+      "remove_button": true
+    }
+  },
+  "chrome_url_overrides": {...},
+  "commands": {...},
+  "content_capabilities": ...,
+  "content_scripts": [{...}],
+  "content_security_policy": "policyString",
+  "converted_from_user_script": ...,
+  "current_locale": ...,
+  "declarative_net_request": ...,
+  "devtools_page": "devtools.html",
+  "event_rules": [{...}],
+  "externally_connectable": {
+    "matches": ["*://*.example.com/*"]
+  },
+  "file_browser_handlers": [...],
+  "file_system_provider_capabilities": {
+    "configurable": true,
+    "multiple_mounts": true,
+    "source": "network"
+  },
+  "homepage_url": "http://path/to/homepage",
+  "import": [{"id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}],
+  "incognito": "spanning, split, or not_allowed",
+  "input_components": ...,
+  "key": "publicKey",
+  "minimum_chrome_version": "versionString",
+  "nacl_modules": [...],
+  "oauth2": ...,
+  "offline_enabled": true,
+  "omnibox": {
+    "keyword": "aString"
+  },
+  "optional_permissions": ["tabs"],
+  "options_page": "options.html",
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  },
+  "permissions": ["tabs"],
+  "platforms": ...,
+  "replacement_web_app": ...,
+  "requirements": {...},
+  "sandbox": [...],
+  "short_name": "Short Name",
+  "signature": ...,
+  "spellcheck": ...,
+  "storage": {
+    "managed_schema": "schema.json"
+  },
+  "system_indicator": ...,
+  "tts_engine": {...},
+  "update_url": "http://path/to/updateInfo.xml",
+  "version_name": "aString",
+  "web_accessible_resources": [...]
+}
+
+    
+Manage Events with Background Scripts
+
+    background pages stay as long as an action is performed also until all visible views and network ports are closed
+    
+    its a chrome convention that your extension background scripts should have 'persistent' : false
+    
+    use chrome.runtime.onInstalled to setup your main context once the event has been installed
+    
+    
+Set Up Listeners
+
+    make event listeners for your code
+    
+    to remove extension
+    
+    chrome.runtime.onMessage.addListener(function(message, sender, reply) {
+          chrome.runtime.onMessage.removeListener(event);
+      });
+      
+    chrome wont load the extension background script for the event
+    
+    
+Filter Events
+
+    
+    sometimes you do not want to fire on all times use
+    over tabs.onUpdated to filter better (the url object must be the filter
+    
+      chrome.webNavigation.onCompleted.addListener(function() {
+            alert("This is my favorite website!");
+        }, {url: [{urlMatches : 'https://www.google.com/'}]});
+    
+    
+
+React to Listeners
+
+    really act on event data
+    
+    chrome.runtime.onMessage.addListener(function(message, callback) {
+        if (message.data == “setAlarm”) {
+             chrome.alarms.create({delayInMinutes: 5})
+        } else if (message.data == “runLogic”) {
+             chrome.tabs.executeScript({file: 'logic.js'});
+        } else if (message.data == “changeColor”) {
+             chrome.tabs.executeScript(
+                 {code: 'document.body.style.backgroundColor="orange"'});
+        };
+    });
+    
+    
+            
+            
+Unload Background Scripts
+
+    to help with sync incase crashes happen
+    
+        chrome.storage.local.set({variable: variableInformation});
+        
+    if extensions use message passing ensure all ports are closed like this
+    
+         runtime.Port.disconnect         method to close
+         runtime.Port.onDisconnect       is  the event handler
+    
+    
+    
+The lifetime of a background script is when an entry appears and leaves chrome task manager
+    

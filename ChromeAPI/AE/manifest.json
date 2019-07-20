@@ -1,0 +1,9 @@
+{
+  "name": "Awesome Test Extension",
+  ...
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  
+}
