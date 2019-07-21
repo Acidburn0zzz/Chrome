@@ -1264,4 +1264,253 @@ Icon Size   	Icon Use
   
   
 Additional UI Features
-  
+
+
+    Popup - an html file that cannot use inline JS, remember uorigin extension this is it
+        
+        looks like this in the manifest can use browser or page action
+        
+        
+        "browser_action": {
+          "default_popup": "popup.html"
+        }
+        
+        
+        you can also modify popups
+        
+            
+        chrome.storage.local.get('signed_in', function(data) {
+            if (data.signed_in) {
+              chrome.browserAction.setPopup({popup: 'popup.html'});
+            } else {
+              chrome.browserAction.setPopup({popup: 'popup_sign_in.html'});
+            }
+        });
+        
+    Tooltip
+    
+        Use a tooltip to give short descriptions or instructions to users when hovering over the browser icon.
+        
+        to use in manifest
+        
+        
+            "browser_action": {
+              "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs"
+            }
+        
+    
+    
+        to modify
+        
+        
+        chrome.browserAction.onClicked.addListener(function(tab) {
+            chrome.browserAction.setTitle({tabId: tab.id, title: "You are on tab:" + tab.id});
+        });
+        
+        
+        _locales/en/messages.json
+        _locales/es/messages.json
+        
+            makes your extension language friendly
+            
+            
+            {
+                "__MSG_tooltip__": {
+                    "message": "Hello!",
+                    "description": "Tooltip Greeting."
+                }
+            }
+            {
+                "__MSG_tooltip__": {
+                    "message": "Hola!",
+                    "description": "Tooltip Greeting."
+                }
+            }
+            Include the name of the message in the tooltip field instead of the message to enable localization.
+            
+            {
+                "name": "Tab Flipper",
+                ...
+                "browser_action": {
+                  "default_title": "__MSG_tooltip__"
+                }
+                ...
+            }
+        
+        Omnibox
+        
+            users can use the omnibox to work with the extension in the manifest do
+            
+            
+
+                "omnibox": { "keyword" : "nt" },
+     
+                to react to what the user sent
+            
+                chrome.omnibox.onInputEntered.addListener(function(text) {
+                  // Encode user input for special characters , / ? : @ & = + $ #
+                  var newURL = 'https://www.google.com/search?q=' + encodeURIComponent(text);
+                  chrome.tabs.create({ url: newURL });
+                });
+                
+            file: AE/background.js
+            
+            
+        Context Menu
+        
+            you use it by greanting it in the manifest
+            
+            to actually actiate u need one of the things as defined in the contexts parameter
+            
+            
+                  chrome.contextMenus.create({
+                    id: key,
+                    title: kLocales[key],
+                    type: 'normal',
+                    contexts: ['selection',"page", "image", "link"],
+                  });
+                  
+        Commands
+        
+            Extensions can define specific commands and bind them to a key combination.
+            
+            in the manifest
+                    
+            "commands": {
+              "flip-tabs-forward": {
+                "suggested_key": {
+                  "default": "Ctrl+Right",
+                  "mac": "Command+Shift+Right"
+                },
+                "description": "Flip tabs forward"
+              },
+              "flip-tabs-backwards": {
+                "suggested_key": {
+                  "default": "Ctrl+Left",
+                  "mac": "Command+Shift+Left"
+                },
+                "description": "Flip tabs backwards"
+              }
+            }
+            
+            file AE/background.js
+            
+        
+                to activate the popups doesnt work
+                
+                            
+                  "execute_browser_action": { // or execute_page_action
+                    "suggested_key": {
+                      "default": "Ctrl+Shift+F",
+                      "mac": "MacCtrl+Shift+F"
+                    },
+                    "description": "Flip tabs backwards"
+                  }
+                  
+                  
+                  
+    Overrides
+                to overide the history, pages or newtab  in the manifest
+                
+                in each extension you can only override one of the 3
+                "chrome_url_overrides" : {
+                  "newtab": "override_page.html"
+                },
+                
+                
+                
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+Content Scripts
+
+    this is how you access the DOM in the browser domain that is not your extension
+    
+    
+Understand Content Script Capabilities
+
+
+    they exchange messages with the parent extension and get files from the extension with
+    chrome.runtime.getURL()
+    
+    
+    they can access the following API directly and nothing else
+    
+    
+    i18n
+    storage
+    runtime:
+        connect
+        getManifest
+        getURL
+        id
+        onConnect
+        onMessage
+        sendMessage
+            
+            
+Work in Isolated Worlds, they do not conflict with the webpage or additional content scripts
+    this means webpages cannot access the content too
+    
+    
+    
+Inject Scripts
+
+
+    Inject Programmatically
+        this helps it to run on specific occasions
+        
+        
+        in the manifest
+        
+        
+    {
+        "name": "My extension",
+        ...
+        "permissions": [
+          "activeTab","http://*/","https://*/"
+        ],
+        ...
+    }
+        
+    you need the protocals, so it can run on every
+    file: AE/background.js
+    
+    
+    
+    Inject Declaratively
+
+
+        for ones that run on specified pages, must have the matches keyword in the object
+        
+            "content_scripts": [
+                {
+                 "matches": ["http://*.nytimes.com/*"],
+                 "css": ["myStyles.css"],
+                 "js": ["contentScript.js"]
+                }
+            ],
+            
+            
+            

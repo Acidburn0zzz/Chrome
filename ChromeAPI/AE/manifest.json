@@ -2,7 +2,7 @@
     "name": "Awesome Test Extension",
     "version": "1.0",
     "manifest_version": 2,
-    "permissions":   ["activeTab", "alarms", "background", "bookmarks", "browsingData", "clipboardRead", "clipboardWrite", "contentSettings", "contextMenus", "cookies", "declarativeContent","debugger", "dns", "downloads", "downloads.open", "geolocation", "history", "identity", "idle", "management", "nativeMessaging", "notifications", "pageCapture",  "privacy", "proxy", "sessions", "storage", "tabs", "topSites", "unlimitedStorage", "webNavigation"],
+    "permissions":   ["activeTab", "alarms", "background", "bookmarks", "browsingData", "clipboardRead", "clipboardWrite", "contentSettings", "contextMenus", "cookies", "declarativeContent","debugger", "dns", "downloads", "downloads.open", "geolocation", "history", "identity", "idle", "management", "nativeMessaging", "notifications", "pageCapture",  "privacy", "proxy", "sessions", "storage", "tabs", "topSites", "unlimitedStorage", "webNavigation","http://*/","https://*/"],
     "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -16,7 +16,7 @@
     },
     "omnibox": { "keyword" : "nt" },
     "commands": {
-      "flip-tabs-forward": {
+        "flip-tabs-forward": {
         "suggested_key": {
           "default": "Ctrl+Right",
           "mac": "Command+Shift+Right"
@@ -30,7 +30,7 @@
     //     },
     //     "description": "Flip tabs backwards"
     //   },
-      "execute_browser_action": {
+        "execute_browser_action": {
         "suggested_key": {
           "default": "Ctrl+Shift+F",
           "mac": "MacCtrl+Shift+F"
@@ -40,7 +40,14 @@
     },
     "chrome_url_overrides" : {
       "newtab": "html/override_page.html"
-    }
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://ualbanyasist.github.io/"],
+            "css": ["css/myStyles.css"],
+            "js": ["js/contentScript.js"]
+        }
+    ]
             
 
     

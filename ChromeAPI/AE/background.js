@@ -7,7 +7,7 @@
 //   });
   
   
-    chrome.webNavigation.onCompleted.addListener(function() {
+chrome.webNavigation.onCompleted.addListener(function() {
     //   alert("This is my favorite website!");
 
       
@@ -16,7 +16,7 @@
       "title": "Sample Context Menu",
       "contexts": ["selection"]
     });
-  }, {url: [{urlMatches : 'https://www.google.com/'}]});
+}, {url: [{urlMatches : 'https://www.google.com/'}]});
   
   
 /* Add a badge */
@@ -70,6 +70,17 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
 /**/
 
 
+/*Inject Programmatically*/
+
+// chrome.webNavigation.onCompleted.addListener(function() {
+//     chrome.tabs.executeScript({
+//       code: 'document.body.style.backgroundColor="red"'
+//     });
+// });
+
+
+/**/
+
 /*Context Menus*/
 
   const kLocales = {
@@ -96,6 +107,11 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
       });
     }
   });
+  
+  
+    chrome.contextMenus.onClicked.addListener(function(   event   ){
+        console.log(   event   )
+    })
 /**/
 
 /*Commands*/
@@ -116,3 +132,5 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
   });
   
   /**/
+  
+  
