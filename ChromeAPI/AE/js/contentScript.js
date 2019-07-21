@@ -8,7 +8,16 @@ var port = chrome.runtime.connect();
 
 window.addEventListener("message", function(event) {
   // We only accept messages from ourselves
-  if (event.source != window)
+  
+  
+    /*Simple one-time requests */
+    
+    chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+        console.log(response.farewell);
+    });
+    
+    /**/
+    if (event.source != window)
     return;
 
   if (event.data.type && (event.data.type == "FROM_PAGE")) {
@@ -17,4 +26,17 @@ window.addEventListener("message", function(event) {
   }
 }, false);
 
+/**/
+
+
+
+/*Simple one time requests*/
+chrome.runtime.onMessage.addListener(
+      function(request, sender, sendResponse) {
+        console.log(sender.tab ?
+                    "from a content script:" + sender.tab.url :
+                    "from the extension");
+        if (request.greeting == "hello")
+          sendResponse({farewell: "goodbye"});
+      });
 /**/

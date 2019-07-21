@@ -7,6 +7,18 @@
 //   });
   
   
+/* Simple one-time requests */
+chrome.omnibox.onInputEntered.addListener(function(text) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        console.log(tabs)
+      chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+        console.log(response.farewell);
+      });
+    });
+})
+
+/**/
+    
 chrome.webNavigation.onCompleted.addListener(function() {
     //   alert("This is my favorite website!");
 
@@ -35,8 +47,16 @@ chrome.webNavigation.onCompleted.addListener(function() {
 //     // Replace all rules ...
     
 
-        
-  
+/*Simple one time requests*/
+chrome.runtime.onMessage.addListener(
+      function(request, sender, sendResponse) {
+        console.log(sender.tab ?
+                    "from a content script:" + sender.tab.url :
+                    "from the extension");
+        if (request.greeting == "hello")
+          sendResponse({farewell: "goodbye"});
+      });
+/**/
   
 //     /**/
 //     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
@@ -61,11 +81,11 @@ chrome.webNavigation.onCompleted.addListener(function() {
   
 
 /*Omnibox*/
-chrome.omnibox.onInputEntered.addListener(function(text) {
-  // Encode user input for special characters , / ? : @ & = + $ #
-  var newURL = 'https://www.google.com/search?q=' + encodeURIComponent(text);
-  chrome.tabs.create({ url: 'https://www.nba.com' });
-});
+// chrome.omnibox.onInputEntered.addListener(function(text) {
+//   // Encode user input for special characters , / ? : @ & = + $ #
+//   var newURL = 'https://www.google.com/search?q=' + encodeURIComponent(text);
+//   chrome.tabs.create({ url: 'https://www.nba.com' });
+// });
 
 /**/
 
