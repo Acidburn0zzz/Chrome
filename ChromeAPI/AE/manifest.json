@@ -14,7 +14,34 @@
       "default_popup": "html/popup.html",
        "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs"
     },
-    "omnibox": { "keyword" : "nt" }
+    "omnibox": { "keyword" : "nt" },
+    "commands": {
+      "flip-tabs-forward": {
+        "suggested_key": {
+          "default": "Ctrl+Right",
+          "mac": "Command+Shift+Right"
+        },
+        "description": "Flip tabs forward"
+      },
+    //   "flip-tabs-backwards": {
+    //     "suggested_key": {
+    //       "default": "Ctrl+Left",
+    //       "mac": "Command+Shift+Left"
+    //     },
+    //     "description": "Flip tabs backwards"
+    //   },
+      "execute_browser_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+F",
+          "mac": "MacCtrl+Shift+F"
+        },
+        "description": "Open the popup"
+      }
+    },
+    "chrome_url_overrides" : {
+      "newtab": "html/override_page.html"
+    }
+            
 
     
     /*"page_action": {
