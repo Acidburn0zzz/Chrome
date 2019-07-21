@@ -1,15 +1,31 @@
 
-alert('running this declarative script')
+// alert('running this declarative script')
 document.body.style.opacity = '.1'
 
 
 /*Communication with the embedding page and your background script*/
-var port = chrome.runtime.connect();
+// var port = chrome.runtime.connect();
+
+/*Long-lived connections*/
+var port = chrome.runtime.connect({name: "knockknock"});
+/**/
+
 
 window.addEventListener("message", function(event) {
   // We only accept messages from ourselves
   
-  
+    /*Long-lived connections*/
+        
+        port.postMessage({joke: "Knock knock"});
+        port.onMessage.addListener(function(msg) {
+          if (msg.question == "Who's there?")
+            port.postMessage({answer: "Madame"});
+          else if (msg.question == "Madame who?"){
+            port.postMessage({answer: "Madame... Bovary"});
+          }
+          console.log(msg.question)
+        });
+    /**/
     /*Simple one-time requests */
     
     chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
@@ -40,3 +56,5 @@ chrome.runtime.onMessage.addListener(
           sendResponse({farewell: "goodbye"});
       });
 /**/
+
+

@@ -48,16 +48,30 @@ chrome.webNavigation.onCompleted.addListener(function() {
     
 
 /*Simple one time requests*/
-chrome.runtime.onMessage.addListener(
-      function(request, sender, sendResponse) {
-        console.log(sender.tab ?
-                    "from a content script:" + sender.tab.url :
-                    "from the extension");
-        if (request.greeting == "hello")
-          sendResponse({farewell: "goodbye"});
-      });
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        console.log(sender.tab ? "from a content script:" + sender.tab.url :"from the extension");
+        if (request.greeting == "hello"){
+            sendResponse({farewell: "goodbye"})
+        }
+});
 /**/
   
+/*Long lived connections*/
+chrome.runtime.onConnect.addListener(function(port) {
+  var response = {question:''}
+  console.log(port.name == "knockknock");
+  port.onMessage.addListener(function(msg) {
+    if (msg.joke == "Knock knock")
+      port.postMessage({question: "Who's there?"});
+    else if (msg.answer == "Madame")
+      port.postMessage({question: "Madame who?"});
+    else if (msg.answer == "Madame... Bovary"){
+      port.postMessage({question: "I don't get it."});
+    }
+    console.log(msg)
+  });
+});
+/**/
 //     /**/
 //     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
 //       // With a new rule ...
