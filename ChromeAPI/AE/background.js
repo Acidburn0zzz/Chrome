@@ -70,8 +70,15 @@ chrome.runtime.onConnect.addListener(function(port) {
     }
     console.log(msg)
   });
+  port.onDisconnect.addListener(function(event) {
+        console.log('disconecct',event)
 });
 /**/
+});
+
+
+
+
 //     /**/
 //     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
 //       // With a new rule ...

@@ -23,6 +23,9 @@ window.addEventListener("message", function(event) {
           else if (msg.question == "Madame who?"){
             port.postMessage({answer: "Madame... Bovary"});
           }
+          else if (msg.question ==  "I don't get it."){
+            port.disconnect()
+          }
           console.log(msg.question)
         });
     /**/
