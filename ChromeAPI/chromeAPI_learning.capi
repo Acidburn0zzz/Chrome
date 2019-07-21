@@ -1507,10 +1507,109 @@ Inject Scripts
             "content_scripts": [
                 {
                  "matches": ["http://*.nytimes.com/*"],
-                 "css": ["myStyles.css"],
-                 "js": ["contentScript.js"]
+                 "css": ["css/myStyles.css"],
+                 "js": ["js/contentScript.js"]
                 }
             ],
             
+        files: css/myStyles.css
+                js/contentScript.js
             
             
+    this is it json schema  table
+    
+    
+    
+matches	                array of strings        Required. Specifies which pages this content script will be injected into.
+                                                See Match Patterns for more details on the syntax of these strings and
+                                                Match patterns and globs for information on how to exclude URLs.
+                                            
+css	        	        array of strings        Optional. The list of CSS files to be injected into matching pages.
+                                                These are injected in the order they appear in this array,
+                                                before any DOM is constructed or displayed for the page.
+                                                
+js	                    array of strings        Optional. The list of JavaScript files to be injected into matching pages.
+                                                These are injected in the order they appear in this array.
+                                            
+match_about_blank	            boolean         Optional. Whether the script should inject into an about:blank
+                                                frame where the parent or opener frame matches one of the patterns declared
+                                                in matches. Defaults to false.
+                                                    
+                                                    
+exclude_matches	        array of strings        Optional. Excludes pages that this content script would otherwise be injected into                                                . See Match Patterns for more details on the syntax of these strings.
+
+include_globs	        array of strings	    Optional. Applied after matches to include only those URLs that also match this glob.                                             Intended to emulate the @include Greasemonkey keyword.
+
+exclude_globs	        array of string	        Optional. Applied after matches to exclude URLs that match this glob. Intended to                                                 emulate the @exclude Greasemonkey keyword.
+
+
+' to inject  the content script into http://www.nytimes.com/ health but not into http://www.nytimes.com/business .'
+
+
+
+  "content_scripts": [
+    {
+      "matches": ["http://*.nytimes.com/*"],
+      "exclude_matches": ["*://*/*business*"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  
+  
+`globs are a different form of URL regex
+
+
+the glob "http://???.example.com/foo/*" matches
+
+http:// www .example.com/foo /bar
+http:// the .example.com/foo /
+
+no match
+
+http:// my .example.com/foo/bar
+http:// example .com/foo/
+http://www.example.com/foo`
+
+
+the glob "*nytimes.com/???s/*"
+
+match
+ http:/www.nytimes.com/arts/index.html
+ http://www.nytimes.com/jobs/index.html
+ 
+ 
+ does not match
+ 
+ http://www.nytimes.com/ sports /index.html
+ 
+the glob "*science*"
+ 
+    match
+    
+    http://history.nytimes.com
+    http://.nytimes.com/history
+    
+    does not match
+    
+    http:// science .nytimes.com
+    http://www.nytimes.com/ science
+ 
+ to use in the manifest
+ 
+    "content_scripts": [
+        {
+          "matches": ["http://*.nytimes.com/*"],
+          "include_globs": [[YOUR GLOB HERE]],
+          "exclude_globs": [[YOUR GLOB HERE]],
+          "js": ["contentScript.js"]
+        }
+    ],
+    
+    
+    you use of matches,exclude_matches,include_globs,exclude_globs to achieve the correct scope
+    
+    
+    
+Run Time
+
+    
