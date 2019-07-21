@@ -1029,8 +1029,24 @@ Manage Events with Background Scripts
     its a chrome convention that your extension background scripts should have 'persistent' : false
     
     use chrome.runtime.onInstalled to setup your main context once the event has been installed
+
+
+Initialize the Extension
+
+    use chrome.runtime.onInstalled to initalize
     
+    ex
     
+      chrome.runtime.onInstalled.addListener(function() {
+        chrome.contextMenus.create({
+          "id": "sampleContextMenu",
+          "title": "Sample Context Menu",
+          "contexts": ["selection"]
+        });
+      });
+      
+    folder: AE/background.js
+        
 Set Up Listeners
 
     make event listeners for your code
@@ -1042,6 +1058,8 @@ Set Up Listeners
       });
       
     chrome wont load the extension background script for the event
+    
+    do not however add events in nested async
     
     
 Filter Events
@@ -1088,4 +1106,56 @@ Unload Background Scripts
     
     
 The lifetime of a background script is when an entry appears and leaves chrome task manager
+
+    they unload on their own, if more listen make data persist
     
+    
+    
+                      ,,ggddY""""Ybbgg,,
+                 ,agd""'              `""bg,
+              ,gdP"                       "Ybg,
+            ,dP"                             "Yb,
+          ,dP" l      _,,ddP"""Ybb,,_         "Yb,
+         ,8"   l    ,dP"'         `"Yb,         "8,
+        ,8'    l  ,d"                 "b, \       `8,
+       ,8'     l d"                     "b  -------`8,
+       d'      ; d'                       `b       `b
+       8       l 8                         8        8
+       8        l8                         8        8
+       8         8                         8        8
+       8         Y,                       ,P        8
+       Y,         Ya                     aP        ,P
+       `8,         "Ya                 aP"         ,8'
+        `8,          "Yb,_         _,dP"          ,8'
+         `8a           `""YbbgggddP""'           a8'
+          `Yba                      l          adP'
+            "Yba                   l         adY"
+              `"Yba,              l       ,adP"'
+                 `"Y8ba,        l    ,ad8P"'
+                      ``""YYbaaadPP""''
+
+
+Design User Interface
+
+
+
+Activate the extension on all pages
+
+    to make the extension work on all browser pages in your manifest
+    
+    
+    {
+    "name": "My Awesome browser_action Extension",
+    ...
+    "browser_action": {
+      ...
+    }
+    ...
+    }
+  
+  
+    when the API sees this in the manifest it will add color to the icon that means its availble to users
+    
+
+Add a badge
+        
