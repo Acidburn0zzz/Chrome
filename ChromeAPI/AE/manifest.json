@@ -2,7 +2,7 @@
     "name": "Awesome Test Extension",
     "version": "1.0",
     "manifest_version": 2,
-    "permissions":   ["activeTab", "alarms", "background", "bookmarks", "browsingData", "clipboardRead", "clipboardWrite", "contentSettings", "contextMenus", "cookies", "debugger", "dns", "downloads", "downloads.open", "geolocation", "history", "identity", "idle", "management", "nativeMessaging", "notifications", "pageCapture",  "privacy", "proxy", "sessions", "storage", "tabs", "topSites", "unlimitedStorage", "webNavigation"],
+    "permissions":   ["activeTab", "alarms", "background", "bookmarks", "browsingData", "clipboardRead", "clipboardWrite", "contentSettings", "contextMenus", "cookies", "declarativeContent","debugger", "dns", "downloads", "downloads.open", "geolocation", "history", "identity", "idle", "management", "nativeMessaging", "notifications", "pageCapture",  "privacy", "proxy", "sessions", "storage", "tabs", "topSites", "unlimitedStorage", "webNavigation"],
     "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -10,5 +10,6 @@
     "icons": {
       "128": "images/icons_16.jpeg"
     },
-     "browser_action": {}
+    // "browser_action": {}
+    "page_action": {}
 }
