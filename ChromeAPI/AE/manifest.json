@@ -11,11 +11,16 @@
       "128": "images/icons_16.jpeg"
     },
     "browser_action": {
-      "default_popup": "html/popup.html"
-    }
+      "default_popup": "html/popup.html",
+       "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs"
+    },
+    "omnibox": { "keyword" : "nt" } 
+
+    
     /*"page_action": {
         "default_icon": {
           "16": "images/icons_16.jpeg"
         }
     }*/
 }
+
