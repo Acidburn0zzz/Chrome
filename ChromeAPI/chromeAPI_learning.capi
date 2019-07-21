@@ -1159,3 +1159,12 @@ Activate the extension on all pages
 
 Add a badge
         
+    colored banner with 4 letters
+    Use badges to indicate the state of the extension
+    
+    
+    chrome.browserAction.setBadgeText({text: 'ON'});
+    chrome.browserAction.setBadgeBackgroundColor({color: 'red'});
+    
+    
+    file AE/backgroud.js
