@@ -10,6 +10,12 @@
     "icons": {
       "128": "images/icons_16.jpeg"
     },
-    // "browser_action": {}
-    "page_action": {}
+    "browser_action": {
+      "default_popup": "html/popup.html"
+    }
+    /*"page_action": {
+        "default_icon": {
+          "16": "images/icons_16.jpeg"
+        }
+    }*/
 }
