@@ -43,7 +43,8 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://ualbanyasist.github.io/"],
+            "matches": ["http://24.189.66.225/backend/index/animations"],
+            "run_at": "document_idle",
             "css": ["css/myStyles.css"],
             "js": ["js/contentScript.js"]
         }

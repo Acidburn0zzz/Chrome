@@ -59,7 +59,7 @@ chrome.webNavigation.onCompleted.addListener(function() {
   
   /**/
   
-  
+
 /*Omnibox*/
 chrome.omnibox.onInputEntered.addListener(function(text) {
   // Encode user input for special characters , / ? : @ & = + $ #

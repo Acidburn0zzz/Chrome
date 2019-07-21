@@ -1612,4 +1612,82 @@ the glob "*science*"
     
 Run Time
 
+    this controlls when js is injected into the run in field
     
+    use the run_at key in the manifest
+    default is document_idle , values are document_start, document_end
+    its best to use document_idle
+    
+      "content_scripts": [
+        {
+          "matches": ["http://*.nytimes.com/*"],
+          "run_at": "document_idle",
+          "js": ["contentScript.js"]
+        }
+      ],
+      
+      document_idle - browser chooses a time between window.onload and window.end
+      document_start - Scripts are injected after any files from css, but before any  DOM is constructed or any  script is run.
+      document_end - right after DOM finishes, but before any  subresources, or XHR
+      
+      
+Specify frames
+    controlls whether content scripts go in all frames or just top most frame
+    use keyword all_frames in the manifest
+    if false top frame is matched, true it will inject every frame instead of child frame if URL requirements are not met
+    
+  "content_scripts": [
+    {
+      "matches": ["http://*.nytimes.com/*"],
+      "all_frames": true,
+      "js": ["contentScript.js"]
+    }
+  ],
+    
+    
+      
+      
+Communication with the embedding page
+    
+    the webpage cannot touch the contentScript by default but it can talk to it this is how
+    
+    
+in homepage.html
+
+document.getElementById("theButton").addEventListener("click",
+    function() {
+  window.postMessage({ type: "FROM_PAGE", text: "Hello from the webpage!" }, "*");
+}, false);
+
+
+in contentScript.js
+
+var port = chrome.runtime.connect();
+
+window.addEventListener("message", function(event) {
+  // We only accept messages from ourselves
+  if (event.source != window)
+    return;
+
+  if (event.data.type && (event.data.type == "FROM_PAGE")) {
+    console.log("Content script received: " + event.data.text);
+    port.postMessage(event.data.text);
+  }
+}, false);
+
+
+in background.js
+
+
+
+files
+
+Plotly/animations.html
+css/myStyles.css
+js/background.js
+js/logic.js
+
+
+The non-extension page, example.html, posts messages to itself. This message is intercepted and inspected by the content script and then posted to the extension process. In this way, the page establishes a line of communication to the extension process. The reverse is possible through similar means.
+
+Stay Secure
