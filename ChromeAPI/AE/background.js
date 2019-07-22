@@ -70,10 +70,12 @@ chrome.runtime.onConnect.addListener(function(port) {
     }
     console.log(msg)
   });
-  port.onDisconnect.addListener(function(event) {
+    /*    Port lifetime */
+    port.onDisconnect.addListener(function(event) {
         console.log('disconecct',event)
-});
-/**/
+    
+    });
+    /**/
 });
 
 

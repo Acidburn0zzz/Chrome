@@ -24,7 +24,9 @@ window.addEventListener("message", function(event) {
             port.postMessage({answer: "Madame... Bovary"});
           }
           else if (msg.question ==  "I don't get it."){
+             /*    Port lifetime */
             port.disconnect()
+            /**/
           }
           console.log(msg.question)
         });

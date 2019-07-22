@@ -41,6 +41,9 @@
     "chrome_url_overrides" : {
       "newtab": "html/override_page.html"
     },
+    // "externally_connectable": {
+    //   "matches": ["http://24.189.66.225/backend/index/animations"]
+    // },
     "content_scripts": [
         {
             "matches": ["http://24.189.66.225/backend/index/animations"],
